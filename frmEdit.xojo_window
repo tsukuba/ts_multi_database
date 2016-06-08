@@ -58,7 +58,7 @@ Begin Window frmEdit
       LockRight       =   True
       LockTop         =   True
       RequiresSelection=   False
-      Scope           =   "0"
+      Scope           =   0
       ScrollbarHorizontal=   False
       ScrollBarVertical=   True
       SelectionType   =   0
@@ -95,7 +95,7 @@ Begin Window frmEdit
       LockLeft        =   False
       LockRight       =   True
       LockTop         =   False
-      Scope           =   "0"
+      Scope           =   0
       TabIndex        =   1
       TabPanelIndex   =   0
       TabStop         =   True
@@ -126,7 +126,7 @@ Begin Window frmEdit
       LockLeft        =   False
       LockRight       =   True
       LockTop         =   False
-      Scope           =   "0"
+      Scope           =   0
       TabIndex        =   4
       TabPanelIndex   =   0
       TabStop         =   True
@@ -154,7 +154,7 @@ Begin Window frmEdit
       LockLeft        =   True
       LockRight       =   False
       LockTop         =   False
-      Scope           =   "0"
+      Scope           =   0
       TabIndex        =   6
       TabPanelIndex   =   0
       TabStop         =   True
@@ -181,7 +181,7 @@ Begin Window frmEdit
          LockLeft        =   True
          LockRight       =   False
          LockTop         =   True
-         Scope           =   "0"
+         Scope           =   0
          TabIndex        =   0
          TabPanelIndex   =   0
          TabStop         =   True
@@ -210,7 +210,7 @@ Begin Window frmEdit
          LockLeft        =   True
          LockRight       =   False
          LockTop         =   True
-         Scope           =   "0"
+         Scope           =   0
          TabIndex        =   1
          TabPanelIndex   =   0
          TabStop         =   True
@@ -242,14 +242,14 @@ Begin Window frmEdit
       LockRight       =   True
       LockTop         =   True
       Multiline       =   False
-      Scope           =   "0"
+      Scope           =   0
       Selectable      =   False
       TabIndex        =   7
       TabPanelIndex   =   0
       TabStop         =   True
       Text            =   "名称未設定"
       TextAlign       =   0
-      TextColor       =   
+      TextColor       =   &c00000000
       TextFont        =   "メイリオ"
       TextSize        =   0.0
       TextUnit        =   0
@@ -271,7 +271,7 @@ Begin Window frmEdit
          LockLeft        =   True
          LockRight       =   True
          LockTop         =   True
-         Scope           =   "0"
+         Scope           =   0
          TabIndex        =   0
          TabPanelIndex   =   0
          TabStop         =   True
@@ -296,7 +296,7 @@ Begin Window frmEdit
       LockLeft        =   True
       LockRight       =   True
       LockTop         =   False
-      Scope           =   "0"
+      Scope           =   0
       TabIndex        =   8
       TabPanelIndex   =   0
       TabStop         =   True
@@ -326,7 +326,7 @@ Begin Window frmEdit
          LockLeft        =   True
          LockRight       =   False
          LockTop         =   True
-         Scope           =   "0"
+         Scope           =   0
          TabIndex        =   0
          TabPanelIndex   =   0
          TabStop         =   True
@@ -343,7 +343,7 @@ Begin Window frmEdit
          Alignment       =   0
          AutoDeactivate  =   True
          AutomaticallyCheckSpelling=   False
-         BackColor       =   
+         BackColor       =   &cFFFFFF00
          Bold            =   False
          Border          =   True
          CueText         =   ""
@@ -366,12 +366,12 @@ Begin Window frmEdit
          Mask            =   ""
          Password        =   False
          ReadOnly        =   False
-         Scope           =   "0"
+         Scope           =   0
          TabIndex        =   1
          TabPanelIndex   =   0
          TabStop         =   True
          Text            =   ""
-         TextColor       =   
+         TextColor       =   &c00000000
          TextFont        =   "メイリオ"
          TextSize        =   0.0
          TextUnit        =   0

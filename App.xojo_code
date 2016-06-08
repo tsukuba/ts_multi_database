@@ -114,40 +114,17 @@ Inherits Application
 		        // Read DB Setting
 		        Dim xml As XmlDocument
 		        xml = App.confXMLLoad(fileConnectSettingFile)
-		        If xml.DocumentElement.GetAttribute("CONNECT") = "AUTO" Then
-		          fileConnectFile = fileConnectFolder.Child(xml.DocumentElement.GetAttribute("DEFAULT"))
-		        Else
+		        fileConnectFile = fileConnectFolder.Child(xml.DocumentElement.GetAttribute("DEFAULT"))
+		        If xml.DocumentElement.GetAttribute("CONNECT") <> "AUTO" Then
 		          // Show DB Select
+		          frmDBSelect.ShowModal
 		          
 		        End If
 		      End If
 		    End If
 		    
 		    // Read Connection File
-		    
-		    
-		    
-		    If fileConnectFile <> Nil And fileConnectFile.Exists Then
-		      
-		      Dim xml As XmlDocument
-		      xml = App.confXMLLoad(fileConnectFile)
-		      
-		      // xml.DocumentElement.GetAttribute("MODE") // ONLY MYSQL
-		      
-		      db.Host = xml.DocumentElement.Child(0).GetAttribute("HOST")
-		      db.Port = Val(xml.DocumentElement.Child(1).GetAttribute("PORT"))
-		      db.DatabaseName = xml.DocumentElement.Child(2).GetAttribute("NAME")
-		      db.UserName = xml.DocumentElement.Child(3).GetAttribute("USER")
-		      db.Password = xml.DocumentElement.Child(4).GetAttribute("PASS")
-		      
-		      db.Timeout = 5
-		      
-		    Else
-		      // Error
-		      MsgBox "Not Found Connect Setting File"
-		      Quit
-		    End If
-		    
+		    confReadConnect()
 		    
 		  End If
 		  
@@ -157,6 +134,47 @@ Inherits Application
 		  
 		  
 		  
+		  
+		  
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub confReadConnect()
+		  // Read Connection File
+		  
+		  If fileConnectFile <> Nil And fileConnectFile.Exists Then
+		    
+		    Dim xml As XmlDocument
+		    xml = App.confXMLLoad(fileConnectFile)
+		    
+		    // xml.DocumentElement.GetAttribute("MODE") // ONLY MYSQL
+		    
+		    db.Host = xml.DocumentElement.Child(0).GetAttribute("HOST")
+		    db.Port = Val(xml.DocumentElement.Child(1).GetAttribute("PORT"))
+		    db.DatabaseName = xml.DocumentElement.Child(2).GetAttribute("NAME")
+		    db.UserName = xml.DocumentElement.Child(3).GetAttribute("USER")
+		    db.Password = xml.DocumentElement.Child(4).GetAttribute("PASS")
+		    
+		    db.Timeout = 5
+		    
+		  Else
+		    // Error
+		    MsgBox "Not Found Connect Setting File"
+		    
+		    // DB Setting
+		    frmDBConf.ShowModal
+		    
+		    Dim xml As New XmlDocument
+		    Dim root As XmlNode
+		    root = xml.AppendChild(xml.CreateElement("SETTING"))
+		    root.SetAttribute("DEFAULT", fileConnectFile.Name)
+		    root.SetAttribute("CONNECT", "AUTO")
+		    confXMLSave(fileConnectSettingFile, xml)
+		    
+		    Quit
+		  End If
 		  
 		  
 		  
@@ -219,7 +237,15 @@ Inherits Application
 		  'End If
 		  
 		  If Not sqlIsTableExists(tblData) Then
+		    frmIndex.ShowModal
 		    sqlTableCreate(tblData, tblDataInd)
+		  Else
+		    // Set Index From DB
+		    tblDataInd = sqlShowCreateTable(tblData)
+		    
+		    // Set Index Name From DB
+		    //MsgBox tblDataInd
+		    
 		  End If
 		  
 		  
@@ -278,6 +304,22 @@ Inherits Application
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h21
+		Private Function RemoveQuotes(text As String) As String
+		  
+		  text = Trim(text)
+		  
+		  If Left(text, 1) = Right(text, 1) Then
+		    If Left(text, 1) = Chr(34) Or Left(text, 1) = Chr(39) Or Left(text, 1) = Chr(96) Then
+		      Return Mid(text, 2, Len(text) - 2)
+		    End If
+		  End If
+		  
+		  Return text
+		  
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h0
 		Sub showDBMain()
 		  //
@@ -289,7 +331,33 @@ Inherits Application
 		  Dim rs As RecordSet
 		  count = sqlDataCount(tblData)
 		  
-		  If count > 100 Then
+		  // Set List InitialValue
+		  If frmMain.lstMain.InitialValue = "" Then
+		    Dim index As String
+		    If tblDataName <> "" Then
+		      frmLog.addLog(4,40401,New Date,"Set SQL Index")
+		      index = ReplaceAll(tblDataName, ",", Chr(9))
+		    Else
+		      frmLog.addLog(3,40301,New Date,"Set SQL Index Using Create Table")
+		      For Each s As String In Split(tblDataInd, ",")
+		        Dim w() As String
+		        w = Split(Trim(s), " ")
+		        If Lowercase(Trim(w(0))) <> "primary" And Lowercase(Trim(w(1))) <> "key" Then
+		          If index <> "" Then
+		            index = index + ","
+		          End If
+		          index = index + RemoveQuotes(w(0))
+		        End If
+		      Next
+		      index = ReplaceAll(index, ",", Chr(9))
+		    End If
+		    frmMain.lstMain.InitialValue =index
+		  End If
+		  
+		  
+		  
+		  
+		  If count > 1000 Then
 		    
 		    
 		    
@@ -302,16 +370,12 @@ Inherits Application
 		        For i As UInt32 = 0 To rs.FieldCount - 1
 		          str.Append(rs.IdxField(i + 1).StringValue)
 		        Next
-		        If frmMain.lstMain.InitialValue = "" Then
-		          frmMain.lstMain.InitialValue = ReplaceAll(tblDataName, ",", Chr(9))
-		        End If
 		        frmMain.addlistMain(str)
 		        rs.MoveNext
 		      Wend
 		      rs.Close
 		    End If
 		  End If
-		  
 		  
 		  frmLog.addLog(4,40401,New Date,"SQL Data Show Completed: " + tblData + " " + str(count))
 		  
@@ -519,20 +583,74 @@ Inherits Application
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Sub sqlTableCreate(table As String, Query As String)
+		Private Function sqlShowCreateTable(tblName As String) As String
 		  //
 		  // ERROR_CODE 51XXX
 		  
-		  frmLog.addLog(3,51301,New Date,"SQL Table Create: " + table + " (" + query + ")")
+		  Dim s As String
+		  
+		  frmLog.addLog(4,51401,New Date,"SQL Table Check: " + tblName)
 		  
 		  If dbIsConnected Then
-		    db.SQLExecute("CREATE TABLE "+table+" ("+query+")")
+		    Dim rs As RecordSet
+		    rs = db.SQLSelect("SHOW CREATE TABLE "+tblName)
+		    
+		    If db.Error Then
+		      frmLog.addLog(1,51101,New Date,"SQL Error: " + db.ErrorMessage)
+		      Return ""
+		    End If
+		    
+		    If rs <> Nil Then
+		      If Not rs.EOF Then
+		        frmLog.addLog(4,51401,New Date,"SQL Table Index Found: " + tblName)
+		        s = rs.IdxField(2).StringValue
+		      End If
+		      rs.Close
+		    End If
 		  End If
 		  
 		  If db.Error Then
 		    frmLog.addLog(1,51102,New Date,"SQL Error: " + db.ErrorMessage)
+		    Return ""
+		  End If
+		  
+		  // Delete CR/LF
+		  s = ReplaceLineEndings(s, EndOfLine)
+		  
+		  Dim lines() As String
+		  lines = Split(s, EndOfLine)
+		  
+		  If Left(lines(0), 12) = "CREATE TABLE" And Right(lines(0), 1) = "(" And Left(lines(lines.Ubound), 1) = ")" Then
+		    lines.Remove(lines.Ubound)
+		    lines.Remove(0)
+		    s = Trim(Join(lines, ""))
+		    Return s
 		  Else
-		    frmLog.addLog(4,51401,New Date,"SQL Table Created: " + table + " (" + query + ")")
+		    frmLog.addLog(1,51103,New Date,"SQL Error: Don't Show Create Table " + db.ErrorMessage)
+		    Return ""
+		  End If
+		  
+		  
+		  
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub sqlTableCreate(table As String, Query As String)
+		  //
+		  // ERROR_CODE 52XXX
+		  
+		  frmLog.addLog(3,52301,New Date,"SQL Table Create: " + table + " (" + query + ")")
+		  
+		  If dbIsConnected Then
+		    db.SQLExecute("CREATE TABLE "+table+" (" + query + ")")
+		  End If
+		  
+		  If db.Error Then
+		    frmLog.addLog(1,52102,New Date,"SQL Error: " + db.ErrorMessage)
+		  Else
+		    frmLog.addLog(4,52401,New Date,"SQL Table Created: " + table + " (" + query + ")")
 		  End If
 		  
 		  

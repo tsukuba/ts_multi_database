@@ -58,7 +58,7 @@ Begin Window frmLog
       LockRight       =   True
       LockTop         =   True
       RequiresSelection=   False
-      Scope           =   "0"
+      Scope           =   0
       ScrollbarHorizontal=   False
       ScrollBarVertical=   True
       SelectionType   =   0
@@ -104,6 +104,14 @@ End
 		  lstLog.RowPicture(lstLog.ListCount-1)=icon
 		  
 		  lstLog.ListIndex = lstLog.ListCount-1
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub Clear()
+		  
+		  frmLog.lstLog.DeleteAllRows
 		  
 		End Sub
 	#tag EndMethod
