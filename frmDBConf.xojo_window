@@ -21,7 +21,7 @@ Begin Window frmDBConf
    MinHeight       =   64
    MinimizeButton  =   False
    MinWidth        =   64
-   Placement       =   0
+   Placement       =   2
    Resizeable      =   False
    Title           =   "Database Config"
    Visible         =   True
@@ -649,7 +649,11 @@ End
 		Sub Action()
 		  
 		  If Not App.fileSettingFile.Exists Then
-		    Quit
+		    If App.dbConfCloseMode Then
+		      Quit
+		    Else
+		      frmDBConf.Close
+		    End If
 		  Else
 		    frmDBConf.Close
 		  End If

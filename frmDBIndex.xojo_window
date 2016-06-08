@@ -1,5 +1,5 @@
 #tag Window
-Begin Window frmIndex
+Begin Window frmDBIndex
    BackColor       =   &cFFFFFF00
    Backdrop        =   0
    CloseButton     =   False
@@ -21,9 +21,9 @@ Begin Window frmIndex
    MinHeight       =   64
    MinimizeButton  =   False
    MinWidth        =   64
-   Placement       =   0
+   Placement       =   1
    Resizeable      =   False
-   Title           =   "Set Index"
+   Title           =   "Set Database Index"
    Visible         =   True
    Width           =   562
    Begin PushButton btnSave

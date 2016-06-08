@@ -237,7 +237,7 @@ Inherits Application
 		  'End If
 		  
 		  If Not sqlIsTableExists(tblData) Then
-		    frmIndex.ShowModal
+		    frmDBIndex.ShowModal
 		    sqlTableCreate(tblData, tblDataInd)
 		  Else
 		    // Set Index From DB
@@ -690,6 +690,10 @@ Inherits Application
 
 	#tag Property, Flags = &h21
 		Private db As MySQLCommunityServer
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		dbConfCloseMode As Boolean = True
 	#tag EndProperty
 
 	#tag Property, Flags = &h0

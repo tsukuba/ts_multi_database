@@ -21,7 +21,7 @@ Begin Window frmEdit
    MinHeight       =   400
    MinimizeButton  =   True
    MinWidth        =   600
-   Placement       =   0
+   Placement       =   1
    Resizeable      =   True
    Title           =   "Edit"
    Visible         =   True
@@ -246,7 +246,6 @@ Begin Window frmEdit
       Selectable      =   False
       TabIndex        =   7
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "名称未設定"
       TextAlign       =   0
       TextColor       =   &c00000000
