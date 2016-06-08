@@ -237,7 +237,7 @@ Inherits Application
 		  'End If
 		  
 		  If Not sqlIsTableExists(tblData) Then
-		    frmDBIndex.ShowModal
+		    //frmDBIndex.ShowModal
 		    sqlTableCreate(tblData, tblDataInd)
 		  Else
 		    // Set Index From DB
@@ -288,6 +288,22 @@ Inherits Application
 		    frmLog.addLog(1,20101,New Date,"Connection Failure to MySQL Server: "+db.ErrorMessage)
 		  End If
 		  
+		  
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub dbDelete()
+		  
+		  
+		  sqlTableDelete(tblLog)
+		  
+		  sqlTableDelete(tblData)
+		  
+		  MsgBox "All Database Table Deleted"
+		  
+		  Quit()
 		  
 		  
 		End Sub
@@ -644,13 +660,34 @@ Inherits Application
 		  frmLog.addLog(3,52301,New Date,"SQL Table Create: " + table + " (" + query + ")")
 		  
 		  If dbIsConnected Then
-		    db.SQLExecute("CREATE TABLE "+table+" (" + query + ")")
+		    db.SQLExecute("CREATE TABLE " + table + " (" + query + ")")
 		  End If
 		  
 		  If db.Error Then
 		    frmLog.addLog(1,52102,New Date,"SQL Error: " + db.ErrorMessage)
 		  Else
 		    frmLog.addLog(4,52401,New Date,"SQL Table Created: " + table + " (" + query + ")")
+		  End If
+		  
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub sqlTableDelete(table As String)
+		  //
+		  // ERROR_CODE 53XXX
+		  
+		  frmLog.addLog(3,53301,New Date,"SQL Table Delete: " + table)
+		  
+		  If dbIsConnected Then
+		    db.SQLExecute("DROP TABLE " + table)
+		  End If
+		  
+		  If db.Error Then
+		    frmLog.addLog(1,53102,New Date,"SQL Error: " + db.ErrorMessage)
+		  Else
+		    frmLog.addLog(4,53401,New Date,"SQL Table Deleted: " + table)
 		  End If
 		  
 		  

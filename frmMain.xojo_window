@@ -105,7 +105,7 @@ Begin Window frmMain
       Top             =   14
       Underline       =   False
       Visible         =   True
-      Width           =   142
+      Width           =   95
    End
    Begin PushButton PushButton2
       AutoDeactivate  =   True
@@ -136,7 +136,7 @@ Begin Window frmMain
       Top             =   14
       Underline       =   False
       Visible         =   True
-      Width           =   140
+      Width           =   89
    End
    Begin PushButton PushButton3
       AutoDeactivate  =   True
@@ -231,6 +231,37 @@ Begin Window frmMain
       Visible         =   True
       Width           =   80
    End
+   Begin PushButton PushButton6
+      AutoDeactivate  =   True
+      Bold            =   False
+      ButtonStyle     =   "0"
+      Cancel          =   False
+      Caption         =   "DeleteDB"
+      Default         =   False
+      Enabled         =   True
+      Height          =   22
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   False
+      Left            =   609
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      Scope           =   0
+      TabIndex        =   8
+      TabPanelIndex   =   0
+      TabStop         =   True
+      TextFont        =   "メイリオ"
+      TextSize        =   0.0
+      TextUnit        =   0
+      Top             =   14
+      Underline       =   False
+      Visible         =   True
+      Width           =   80
+   End
 End
 #tag EndWindow
 
@@ -309,15 +340,12 @@ End
 	#tag Event
 		Sub Action()
 		  
-		  
 		  //Delete
 		  
 		  If frmMain.lstMain.ListIndex <> -1 Then
 		    Dim Id As String
 		    Id = lstMain.Cell(frmMain.lstMain.ListIndex, 0)
-		    
 		    App.sqlDataDelete(App.tblData, "id='" + Id + "'")
-		    
 		    App.showDBMain
 		    
 		  Else
@@ -354,6 +382,27 @@ End
 		Sub Action()
 		  
 		  frmDBEditConf.ShowModal
+		  
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events PushButton6
+	#tag Event
+		Sub Action()
+		  
+		  // Delete Database
+		  
+		  Dim n As Integer
+		  n = MsgBox("Do you want to Delete Database ?", 52)
+		  If n = 6 Then
+		    n = MsgBox("Are you sure ?", 52)
+		    If n = 6 Then
+		      App.dbDelete
+		    End If
+		  End If
+		  
+		  
+		  
 		  
 		End Sub
 	#tag EndEvent
