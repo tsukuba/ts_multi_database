@@ -1,90 +1,70 @@
 #tag Window
-Begin Window frmMain
+Begin Window frmDBDefault
    BackColor       =   &cFFFFFF00
    Backdrop        =   0
-   CloseButton     =   True
+   CloseButton     =   False
    Compatibility   =   ""
    Composite       =   False
    Frame           =   0
    FullScreen      =   False
    FullScreenButton=   False
    HasBackColor    =   False
-   Height          =   600
+   Height          =   100
    ImplicitInstance=   True
-   LiveResize      =   True
+   LiveResize      =   False
    MacProcID       =   0
    MaxHeight       =   32000
-   MaximizeButton  =   True
+   MaximizeButton  =   False
    MaxWidth        =   32000
-   MenuBar         =   1706807295
+   MenuBar         =   0
    MenuBarVisible  =   True
-   MinHeight       =   200
-   MinimizeButton  =   True
-   MinWidth        =   400
-   Placement       =   0
-   Resizeable      =   True
-   Title           =   "MultiDatabase"
+   MinHeight       =   64
+   MinimizeButton  =   False
+   MinWidth        =   64
+   Placement       =   1
+   Resizeable      =   False
+   Title           =   "Database Default"
    Visible         =   True
-   Width           =   800
-   Begin Listbox lstMain
+   Width           =   300
+   Begin PopupMenu pumDB
       AutoDeactivate  =   True
-      AutoHideScrollbars=   True
       Bold            =   False
-      Border          =   True
-      ColumnCount     =   1
-      ColumnsResizable=   True
-      ColumnWidths    =   ""
       DataField       =   ""
       DataSource      =   ""
-      DefaultRowHeight=   -1
       Enabled         =   True
-      EnableDrag      =   False
-      EnableDragReorder=   False
-      GridLinesHorizontal=   2
-      GridLinesVertical=   0
-      HasHeading      =   True
-      HeadingIndex    =   -1
-      Height          =   532
+      Height          =   22
       HelpTag         =   ""
-      Hierarchical    =   False
       Index           =   -2147483648
       InitialParent   =   ""
       InitialValue    =   ""
       Italic          =   False
-      Left            =   0
-      LockBottom      =   True
+      Left            =   20
+      ListIndex       =   0
+      LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
-      LockRight       =   True
+      LockRight       =   False
       LockTop         =   True
-      RequiresSelection=   False
       Scope           =   0
-      ScrollbarHorizontal=   True
-      ScrollBarVertical=   True
-      SelectionType   =   0
-      TabIndex        =   2
+      TabIndex        =   0
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "メイリオ"
       TextSize        =   0.0
       TextUnit        =   0
-      Top             =   48
+      Top             =   14
       Underline       =   False
-      UseFocusRing    =   True
       Visible         =   True
-      Width           =   800
-      _ScrollOffset   =   0
-      _ScrollWidth    =   -1
+      Width           =   260
    End
-   Begin PushButton PushButton1
+   Begin CheckBox chkAuto
       AutoDeactivate  =   True
       Bold            =   False
-      ButtonStyle     =   "0"
-      Cancel          =   False
-      Caption         =   "Add Data"
-      Default         =   False
+      Caption         =   "AutoConnect"
+      DataField       =   ""
+      DataSource      =   ""
       Enabled         =   True
-      Height          =   22
+      Height          =   20
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
@@ -96,106 +76,46 @@ Begin Window frmMain
       LockRight       =   False
       LockTop         =   True
       Scope           =   0
-      TabIndex        =   3
+      State           =   0
+      TabIndex        =   1
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "メイリオ"
       TextSize        =   0.0
       TextUnit        =   0
-      Top             =   14
+      Top             =   59
       Underline       =   False
+      Value           =   False
       Visible         =   True
-      Width           =   142
+      Width           =   100
    End
-   Begin PushButton PushButton2
+   Begin PushButton btnSave
       AutoDeactivate  =   True
       Bold            =   False
       ButtonStyle     =   "0"
       Cancel          =   False
-      Caption         =   "Delete Data"
-      Default         =   False
+      Caption         =   "OK"
+      Default         =   True
       Enabled         =   True
       Height          =   22
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   False
-      Left            =   174
+      Left            =   200
       LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
       LockRight       =   False
       LockTop         =   True
       Scope           =   0
-      TabIndex        =   4
+      TabIndex        =   2
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "メイリオ"
       TextSize        =   0.0
       TextUnit        =   0
-      Top             =   14
-      Underline       =   False
-      Visible         =   True
-      Width           =   140
-   End
-   Begin PushButton PushButton3
-      AutoDeactivate  =   True
-      Bold            =   False
-      ButtonStyle     =   "0"
-      Cancel          =   False
-      Caption         =   "SelectDB"
-      Default         =   False
-      Enabled         =   True
-      Height          =   22
-      HelpTag         =   ""
-      Index           =   -2147483648
-      InitialParent   =   ""
-      Italic          =   False
-      Left            =   326
-      LockBottom      =   False
-      LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   False
-      LockTop         =   True
-      Scope           =   0
-      TabIndex        =   5
-      TabPanelIndex   =   0
-      TabStop         =   True
-      TextFont        =   "メイリオ"
-      TextSize        =   0.0
-      TextUnit        =   0
-      Top             =   14
-      Underline       =   False
-      Visible         =   True
-      Width           =   80
-   End
-   Begin PushButton PushButton4
-      AutoDeactivate  =   True
-      Bold            =   False
-      ButtonStyle     =   "0"
-      Cancel          =   False
-      Caption         =   "DefaultDB"
-      Default         =   False
-      Enabled         =   True
-      Height          =   22
-      HelpTag         =   ""
-      Index           =   -2147483648
-      InitialParent   =   ""
-      Italic          =   False
-      Left            =   418
-      LockBottom      =   False
-      LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   False
-      LockTop         =   True
-      Scope           =   0
-      TabIndex        =   6
-      TabPanelIndex   =   0
-      TabStop         =   True
-      TextFont        =   "メイリオ"
-      TextSize        =   0.0
-      TextUnit        =   0
-      Top             =   14
+      Top             =   58
       Underline       =   False
       Visible         =   True
       Width           =   80
@@ -205,110 +125,56 @@ End
 
 #tag WindowCode
 	#tag Event
-		Sub Close()
-		  App.dbClose
-		  frmLog.Close
-		End Sub
-	#tag EndEvent
-
-	#tag Event
 		Sub Open()
-		  Clear()
-		  
-		End Sub
-	#tag EndEvent
-
-
-	#tag Method, Flags = &h0
-		Sub addlistMain(str() As String)
 		  
 		  
-		  If lstMain.ColumnCount <= str.Ubound Then
-		    Dim tmp As String
-		    tmp = lstMain.InitialValue
-		    lstMain.ColumnCount = str.Ubound + 1
-		    lstMain.InitialValue = tmp
+		  Dim count As Integer = App.fileConnectFolder.Count
+		  Dim def As Integer = 1
+		  For i As Integer = 1 to count
+		    Dim f As FolderItem = App.fileConnectFolder.Item(i)
+		    If f <> Nil Then
+		      If Right(f.Name, 4) = ".xml" Then
+		        If f.Name = App.fileConnectFile.Name Then
+		          def = i
+		        End If
+		        pumDB.AddRow(Left(f.Name, Len(f.Name) - 4))
+		      End If
+		    End If
+		  Next
+		  
+		  pumDB.ListIndex = def - 1
+		  
+		  Dim xml As XmlDocument
+		  xml = App.confXMLLoad(App.fileConnectSettingFile)
+		  If xml.DocumentElement.GetAttribute("CONNECT") = "AUTO" Then
+		    chkAuto.Value = True
+		  Else
+		    chkAuto.Value = False
 		  End If
 		  
-		  lstMain.AddRow(str)
-		  
 		  
 		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Sub Clear()
-		  
-		  frmMain.lstMain.InitialValue = ""
-		  frmMain.lstMain.DeleteAllRows
-		  
-		End Sub
-	#tag EndMethod
+	#tag EndEvent
 
 
 #tag EndWindowCode
 
-#tag Events lstMain
+#tag Events btnSave
 	#tag Event
-		Function CellClick(row as Integer, column as Integer, x as Integer, y as Integer) As Boolean
+		Sub Action()
 		  
-		  
-		  If App.WasDoubleClick Then
-		    App.editMode = 1
-		    App.editId = Array(CType(Val(lstMain.Cell(row, 0)), UInt64))
-		    frmEdit.Show
+		  Dim xml As New XmlDocument
+		  Dim root As XmlNode
+		  root = xml.AppendChild(xml.CreateElement("SETTING"))
+		  root.SetAttribute("DEFAULT", pumDB.Text + ".xml")
+		  If chkAuto.Value Then
+		    root.SetAttribute("CONNECT", "AUTO")
+		  Else
+		    root.SetAttribute("CONNECT", "MANUAL")
 		  End If
+		  App.confXMLSave(App.fileConnectSettingFile, xml)
 		  
-		  
-		  
-		End Function
-	#tag EndEvent
-#tag EndEvents
-#tag Events PushButton1
-	#tag Event
-		Sub Action()
-		  
-		  App.editMode = 0
-		  frmEdit.Show
-		  
-		End Sub
-	#tag EndEvent
-#tag EndEvents
-#tag Events PushButton2
-	#tag Event
-		Sub Action()
-		  
-		  
-		  //Delete
-		  
-		  Dim Id As String
-		  
-		  Id = lstMain.Cell(frmMain.lstMain.ListIndex, 0)
-		  
-		  App.sqlDataDelete(App.tblData, "id='" + Id + "'")
-		  
-		  App.showDBMain
-		  
-		End Sub
-	#tag EndEvent
-#tag EndEvents
-#tag Events PushButton3
-	#tag Event
-		Sub Action()
-		  
-		  App.dbSelectCloseMode = False
-		  frmDBSelect.ShowModalWithin frmMain
-		  
-		  
-		  
-		End Sub
-	#tag EndEvent
-#tag EndEvents
-#tag Events PushButton4
-	#tag Event
-		Sub Action()
-		  
-		  frmDBDefault.ShowModal
+		  frmDBDefault.Close
 		  
 		End Sub
 	#tag EndEvent

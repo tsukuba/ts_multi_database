@@ -186,18 +186,13 @@ End
 	#tag EndMethod
 
 
-	#tag Property, Flags = &h0
-		CloseMode As Boolean = True
-	#tag EndProperty
-
-
 #tag EndWindowCode
 
 #tag Events btnClose
 	#tag Event
 		Sub Action()
 		  
-		  If CloseMode Then
+		  If App.dbSelectCloseMode Then
 		    Quit
 		  Else
 		    frmDBSelect.Close

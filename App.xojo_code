@@ -693,6 +693,10 @@ Inherits Application
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
+		dbSelectCloseMode As Boolean = True
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
 		defCheck() As Checkbox.CheckedStates
 	#tag EndProperty
 
