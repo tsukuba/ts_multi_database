@@ -246,6 +246,7 @@ Begin Window frmEdit
       Selectable      =   False
       TabIndex        =   7
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "名称未設定"
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -564,23 +565,23 @@ End
 		  
 		  If mode = 0 Then
 		    Dim index() As String
-		    index() = Split(App.tblDataInd, ",")
+		    index() = Split(Trim(App.tblDataInd), ",")
 		    
 		    Dim qName As String
 		    Dim qData As String
 		    
 		    For row As Integer = 0 To frmEdit.lstEdit.ListCount - 1
 		      Dim names() As String
-		      names() =Split(index(row + 1))
+		      names() =Split(Trim(index(row + 1)), " ")
 		      
 		      If frmEdit.txtEdit.Text <> "" and row = frmEdit.pumEdit.ListIndex Then
 		        // Overwrite
-		        qName = qName + names(1) + ","
+		        qName = qName + App.RemoveQuotes(names(0)) + ","
 		        qData = qData + "'" + txtEdit.Text + "'" + ","
 		        
 		      ElseIf  frmEdit.lstEdit.Cell(row, 1) <> "" Then
 		        // Write
-		        qName = qName + names(1) + ","
+		        qName = qName + App.RemoveQuotes(names(0)) + ","
 		        qData = qData + "'" + frmEdit.lstEdit.Cell(row, 1) + "'" + ","
 		      End If
 		      
@@ -607,22 +608,22 @@ End
 		  ElseIf mode = 1 Then
 		    
 		    Dim index() As String
-		    index() = Split(App.tblDataInd, ",")
+		    index() = Split(Trim(App.tblDataInd), ",")
 		    
 		    Dim qSet As String
 		    
 		    For row As Integer = 0 To frmEdit.lstEdit.ListCount - 1
 		      Dim names() As String
-		      names() =Split(index(row + 1))
+		      names() =Split(Trim(index(row + 1)))
 		      
 		      If frmEdit.txtEdit.Text <> "" and row = frmEdit.pumEdit.ListIndex Then
 		        // Overwrite
-		        qSet = qSet + names(1) + "="
+		        qSet = qSet + App.RemoveQuotes(names(0)) + "="
 		        qSet = qSet + "'" + txtEdit.Text + "'" + ","
 		        
 		      ElseIf  frmEdit.lstEdit.CellState(row, 2) = CheckBox.CheckedStates.Checked Then
 		        // Write
-		        qSet = qSet + names(1) + "="
+		        qSet = qSet + App.RemoveQuotes(names(0)) + "="
 		        qSet = qSet + "'" + frmEdit.lstEdit.Cell(row, 1) + "'" + ","
 		      End If
 		      

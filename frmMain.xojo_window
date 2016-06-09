@@ -262,6 +262,18 @@ Begin Window frmMain
       Visible         =   True
       Width           =   80
    End
+   Begin Timer tmrPing
+      Height          =   32
+      Index           =   -2147483648
+      Left            =   0
+      LockedInPosition=   False
+      Mode            =   2
+      Period          =   60000
+      Scope           =   0
+      TabPanelIndex   =   0
+      Top             =   0
+      Width           =   32
+   End
 End
 #tag EndWindow
 
@@ -402,6 +414,16 @@ End
 		  End If
 		  
 		  
+		  
+		  
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events tmrPing
+	#tag Event
+		Sub Action()
+		  
+		  App.dbPing()
 		  
 		  
 		End Sub

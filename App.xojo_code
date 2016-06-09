@@ -237,7 +237,7 @@ Inherits Application
 		  'End If
 		  
 		  If Not sqlIsTableExists(tblData) Then
-		    //frmDBIndex.ShowModal
+		    frmDBIndex.ShowModal
 		    sqlTableCreate(tblData, tblDataInd)
 		  Else
 		    // Set Index From DB
@@ -320,8 +320,30 @@ Inherits Application
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h21
-		Private Function RemoveQuotes(text As String) As String
+	#tag Method, Flags = &h0
+		Sub dbPing()
+		  //
+		  // ERROR_CODE 21XXX
+		  
+		  If dbIsConnected Then
+		    db.SQLExecute("SHOW STATUS")
+		  End If
+		  
+		  If db.Error Then
+		    frmLog.addLog(1,21101,New Date,"SQL Error: " + db.ErrorMessage)
+		    dbClose()
+		  End If
+		  
+		  dbClose()
+		  
+		  
+		  
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function RemoveQuotes(text As String) As String
 		  
 		  text = Trim(text)
 		  
@@ -358,7 +380,7 @@ Inherits Application
 		      index = ReplaceAll(tblDataName, ",", Chr(9))
 		    Else
 		      frmLog.addLog(3,40301,New Date,"Set SQL Index Using Create Table")
-		      For Each s As String In Split(tblDataInd, ",")
+		      For Each s As String In Split(Trim(tblDataInd), ",")
 		        Dim w() As String
 		        w = Split(Trim(s), " ")
 		        If Lowercase(Trim(w(0))) <> "primary" And Lowercase(Trim(w(1))) <> "key" Then
