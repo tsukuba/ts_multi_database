@@ -346,6 +346,9 @@ Inherits Application
 		  Dim count As UInt64
 		  Dim rs As RecordSet
 		  count = sqlDataCount(tblData)
+		  Dim stp As Integer
+		  stp = 100
+		  
 		  
 		  // Set List InitialValue
 		  If frmMain.lstMain.InitialValue = "" Then
@@ -371,15 +374,21 @@ Inherits Application
 		  End If
 		  
 		  
+		  If stp < 1 Then
+		    stp = 100
+		  End If
 		  
-		  
-		  If count > 1000 Then
+		  For ofs As Integer=0 To count Step stp
+		    if ofs + stp <= count Then
+		      rs = sqlDataSelect(tblData, ofs, stp, "")
+		    Else
+		      If ofs <> count Then
+		        rs = sqlDataSelect(tblData, ofs, count - ofs, "")
+		      Else
+		        rs = Nil
+		      End If
+		    End If
 		    
-		    
-		    
-		    
-		  Else
-		    rs = sqlDataSelectAll(tblData, "")
 		    If rs <> Nil Then
 		      While Not rs.EOF
 		        Dim str() As String
@@ -391,9 +400,9 @@ Inherits Application
 		      Wend
 		      rs.Close
 		    End If
-		  End If
+		  Next
 		  
-		  frmLog.addLog(4,40401,New Date,"SQL Data Show Completed: " + tblData + " " + str(count))
+		  frmLog.addLog(4,40401,New Date,"SQL Data Show Completed: " + tblData + " " + Str(count))
 		  
 		  
 		  
@@ -836,6 +845,18 @@ Inherits Application
 
 
 	#tag ViewBehavior
+		#tag ViewProperty
+			Name="dbConfCloseMode"
+			Group="Behavior"
+			InitialValue="True"
+			Type="Boolean"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="dbSelectCloseMode"
+			Group="Behavior"
+			InitialValue="True"
+			Type="Boolean"
+		#tag EndViewProperty
 		#tag ViewProperty
 			Name="defData"
 			Group="Behavior"
