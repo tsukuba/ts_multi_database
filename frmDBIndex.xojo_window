@@ -91,6 +91,7 @@ Begin Window frmDBIndex
    Begin Timer tmrPing
       Height          =   32
       Index           =   -2147483648
+      InitialParent   =   ""
       Left            =   0
       LockedInPosition=   False
       Mode            =   2
@@ -116,7 +117,7 @@ Begin Window frmDBIndex
       EnableDragReorder=   False
       GridLinesHorizontal=   0
       GridLinesVertical=   0
-      HasHeading      =   False
+      HasHeading      =   True
       HeadingIndex    =   -1
       Height          =   407
       HelpTag         =   ""
@@ -147,6 +148,7 @@ Begin Window frmDBIndex
       UseFocusRing    =   True
       Visible         =   True
       Width           =   376
+      _ScrollOffset   =   0
       _ScrollWidth    =   -1
    End
    Begin PushButton btnAllClear
@@ -645,19 +647,159 @@ End
 #tag EndWindow
 
 #tag WindowCode
+	#tag Event
+		Sub Open()
+		  
+		  listClear()
+		  
+		End Sub
+	#tag EndEvent
+
+
+	#tag Method, Flags = &h0
+		Sub addTemplate(id As Integer)
+		  
+		  Select Case id
+		  Case 0 // Books
+		    
+		    lstIndex.AddRow(Array("isbn", "ISBN", "TINYTEXT UNICODE"))
+		    lstIndex.AddRow(Array("title", "タイトル", "TEXT UNICODE"))
+		    lstIndex.AddRow(Array("title_kana", "タイトルカナ", "TEXT UNICODE"))
+		    lstIndex.AddRow(Array("subtitle", "サブタイトル", "TEXT UNICODE"))
+		    lstIndex.AddRow(Array("volume", "巻", "TINYINT UNSIGNED"))
+		    lstIndex.AddRow(Array("writer", "作者", "TEXT UNICODE"))
+		    lstIndex.AddRow(Array("writer_kana", "作者カナ", "TEXT UNICODE"))
+		    lstIndex.AddRow(Array("writer2", "作者2", "TEXT UNICODE"))
+		    lstIndex.AddRow(Array("writer2_kana", "作者2カナ", "TEXT UNICODE"))
+		    
+		    '分類コード
+		    '分類
+		    '発行所
+		    'レーベル
+		    'シリーズ
+		    'サイズ
+		    '購入・未購入
+		    '定価
+		    '消費税
+		    '購入価格
+		    '消費税
+		    'ページ数
+		    '内容
+		    'リンク
+		    '初版発行日
+		    '発行予定日
+		    '保管場所
+		    '貸出場所
+		    '貸出日
+		    '既読未読
+		    '読書開始日
+		    '読書終了日
+		    '備考
+		    
+		  Case 1 // Parts
+		    
+		    lstIndex.AddRow(Array("code", "管理コード", "TINYTEXT UNICODE"))
+		    
+		    '型番
+		    'メーカー
+		    'パッケージ
+		    'シリーズ
+		    '値
+		    'グレード
+		    '在庫数量
+		    '推奨在庫個数
+		    '単位
+		    '保管方法
+		    '保管場所
+		    '更新日時
+		    '継続購入
+		    '概要
+		    'メモ
+		    '外部データシート
+		    'データシート
+		    'CAD1
+		    'CAD2
+		    '購入先1
+		    '購入先2
+		    '購入先3
+		    '購入先4
+		    '購入先5
+		    
+		    
+		  End Select
+		  
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub listClear()
+		  
+		  lstIndex.DeleteAllRows
+		  lstIndex.ColumnCount = 3
+		  lstIndex.InitialValue = ReplaceAll("ID,Name,Type", ",", Chr(9))
+		  
+		  // ID Default
+		  lstIndex.AddRow(Array("id", "ID", "BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT"))
+		  
+		  // Type Default
+		  pumType.DeleteAllRows
+		  pumType.AddRow("TINYTEXT UNICODE")
+		  pumType.AddRow("TEXT UNICODE")
+		  pumType.AddRow("MEDIUMTEXT UNICODE")
+		  pumType.AddRow("LONGTEXT UNICODE")
+		  
+		  pumType.AddRow("DATETIME")
+		  pumType.AddRow("DATE")
+		  pumType.AddRow("TIME")
+		  
+		  pumType.AddRow("TINYINT")
+		  pumType.AddRow("TINYINT UNSIGNED")
+		  pumType.AddRow("SMALLINT")
+		  pumType.AddRow("SMALLINT UNSIGNED")
+		  pumType.AddRow("MEDIUMINT")
+		  pumType.AddRow("MEDIUMINT UNSIGNED")
+		  pumType.AddRow("INT")
+		  pumType.AddRow("INT UNSIGNED")
+		  pumType.AddRow("BIGINT")
+		  pumType.AddRow("BIGINT UNSIGNED")
+		  
+		  pumType.ListIndex = 0
+		  
+		  // Set Template
+		  pumTemplate.DeleteAllRows
+		  pumTemplate.AddRow("蔵書管理テンプレート")
+		  pumTemplate.AddRow("部品在庫管理テンプレート")
+		  
+		  pumTemplate.ListIndex = 0
+		  
+		  
+		  
+		  
+		  
+		  
+		End Sub
+	#tag EndMethod
+
+
 #tag EndWindowCode
 
 #tag Events btnSave
 	#tag Event
 		Sub Action()
 		  
+		  Dim index() As String
+		  Dim name() As String
 		  
-		  //App.tblDataInd = ""
-		  //App.tblDataName = ""
+		  For i As Integer = 0 To lstIndex.ListCount - 1
+		    index.Append(lstIndex.Cell(i, 0) + " " + lstIndex.Cell(i, 2))
+		    name.Append(lstIndex.Cell(i, 1))
+		  Next
 		  
+		  App.tblDataInd = Join(index, ",")
+		  App.tblDataName = Join(name, ",")
 		  
-		  
-		  
+		  frmDBIndex.Close
 		  
 		End Sub
 	#tag EndEvent
@@ -676,6 +818,155 @@ End
 		Sub Action()
 		  
 		  App.dbPing
+		  
+		  
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events btnAllClear
+	#tag Event
+		Sub Action()
+		  
+		  listClear()
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events btnImport
+	#tag Event
+		Sub Action()
+		  
+		  Dim id As Integer = pumTemplate.ListIndex
+		  listClear()
+		  addTemplate(id)
+		  
+		  MsgBox "Imported"
+		  
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events btnAdd
+	#tag Event
+		Sub Action()
+		  
+		  If txtId.Text <> "" And txtName.Text <> "" And pumType.Text <> "" Then
+		    
+		    Dim chk As Boolean = True
+		    If lstIndex.ListCount > 0 Then
+		      // ID Check
+		      For i As Integer = 0 To lstIndex.ListCount - 1
+		        If lstIndex.Cell(i, 0) = txtId.Text Then
+		          chk = False
+		          MsgBox "ID is Already Exists"
+		        End If
+		      Next
+		      
+		    End If
+		    
+		    If chk Then
+		      lstIndex.AddRow(Array(txtId.Text, txtName.Text, pumType.Text))
+		    End If
+		    
+		  End If
+		  
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events btnDelete
+	#tag Event
+		Sub Action()
+		  
+		  //Delete
+		  
+		  If lstIndex.ListIndex = -1 Then
+		    // Not Select
+		    MsgBox "Please Select"
+		    
+		  ElseIf lstIndex.ListIndex = 0 Then
+		    // Select ID
+		    MsgBox "You Can Not Delete 'ID'"
+		    
+		  Else
+		    // Delete
+		    lstIndex.RemoveRow(lstIndex.ListIndex)
+		    
+		  End If
+		  
+		  
+		  
+		  
+		  
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events btnUp
+	#tag Event
+		Sub Action()
+		  
+		  // Move Up
+		  
+		  If lstIndex.ListIndex = -1 Then
+		    // Not Select
+		    MsgBox "Please Select"
+		    
+		  ElseIf lstIndex.ListIndex = 0 Then
+		    // Move ID
+		    MsgBox "You Can Not Move Data"
+		    
+		  ElseIf lstIndex.ListIndex = 1 Then
+		    // Move ID
+		    MsgBox "You Can Not Move Data"
+		    
+		  Else
+		    // Move Up
+		    Dim tmp(3) As String
+		    tmp(0) = lstIndex.Cell(lstIndex.ListIndex, 0)
+		    tmp(1) = lstIndex.Cell(lstIndex.ListIndex, 1)
+		    tmp(2) = lstIndex.Cell(lstIndex.ListIndex, 2)
+		    
+		    Dim i As Integer = lstIndex.ListIndex
+		    lstIndex.RemoveRow(i)
+		    lstIndex.InsertRow(i - 1, tmp(0))
+		    lstIndex.Cell(i - 1, 1) = tmp(1)
+		    lstIndex.Cell(i - 1, 2) = tmp(2)
+		    
+		  End If
+		  
+		  
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events btnDown
+	#tag Event
+		Sub Action()
+		  
+		  // Move Down
+		  
+		  If lstIndex.ListIndex = -1 Then
+		    // Not Select
+		    MsgBox "Please Select"
+		    
+		  ElseIf lstIndex.ListIndex = 0 Then
+		    // Move ID
+		    MsgBox "You Can Not Move Data"
+		    
+		  ElseIf lstIndex.ListIndex = lstIndex.ListCount - 1 Then
+		    // Move ID
+		    MsgBox "You Can Not Move Data"
+		    
+		  Else
+		    // Move Up
+		    Dim tmp(3) As String
+		    tmp(0) = lstIndex.Cell(lstIndex.ListIndex, 0)
+		    tmp(1) = lstIndex.Cell(lstIndex.ListIndex, 1)
+		    tmp(2) = lstIndex.Cell(lstIndex.ListIndex, 2)
+		    
+		    Dim i As Integer = lstIndex.ListIndex
+		    lstIndex.RemoveRow(i)
+		    lstIndex.InsertRow(i + 1, tmp(0))
+		    lstIndex.Cell(i + 1, 1) = tmp(1)
+		    lstIndex.Cell(i + 1, 2) = tmp(2)
+		    
+		  End If
 		  
 		  
 		End Sub

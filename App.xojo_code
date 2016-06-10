@@ -334,7 +334,6 @@ Inherits Application
 		    dbClose()
 		  End If
 		  
-		  dbClose()
 		  
 		  
 		  

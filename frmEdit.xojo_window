@@ -563,6 +563,9 @@ End
 		  
 		  frmEdit.btnEdit.Enabled = False
 		  
+		  // Escape + * / - . ' :
+		  
+		  
 		  If mode = 0 Then
 		    Dim index() As String
 		    index() = Split(Trim(App.tblDataInd), ",")
