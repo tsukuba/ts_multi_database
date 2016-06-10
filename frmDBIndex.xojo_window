@@ -790,14 +790,17 @@ End
 		  
 		  Dim index() As String
 		  Dim name() As String
+		  Dim type() As String
 		  
 		  For i As Integer = 0 To lstIndex.ListCount - 1
-		    index.Append(lstIndex.Cell(i, 0) + " " + lstIndex.Cell(i, 2))
+		    index.Append(lstIndex.Cell(i, 0))
 		    name.Append(lstIndex.Cell(i, 1))
+		    type.Append(lstIndex.Cell(i, 2))
 		  Next
 		  
-		  App.tblDataInd = Join(index, ",")
-		  App.tblDataName = Join(name, ",")
+		  App.tblDataInd = index
+		  App.tblDataName = name
+		  App.tblDataType = type
 		  
 		  frmDBIndex.Close
 		  

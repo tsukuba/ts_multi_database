@@ -480,7 +480,7 @@ End
 		  
 		  // Overwrite Menu
 		  Dim names() As String
-		  names = Split(App.tblDataName, ",")
+		  names = App.tblDataName
 		  names.Remove(0)
 		  frmEdit.pumEdit.AddRows(names)
 		  frmEdit.pumEdit.ListIndex = App.defIndex
@@ -563,38 +563,28 @@ End
 		  
 		  frmEdit.btnEdit.Enabled = False
 		  
-		  // Escape + * / - . ' :
-		  
-		  
 		  If mode = 0 Then
-		    Dim index() As String
-		    index() = Split(Trim(App.tblDataInd), ",")
 		    
-		    Dim qName As String
-		    Dim qData As String
+		    Dim qId() As String
+		    Dim qData() As String
 		    
 		    For row As Integer = 0 To frmEdit.lstEdit.ListCount - 1
-		      Dim names() As String
-		      names() =Split(Trim(index(row + 1)), " ")
 		      
 		      If frmEdit.txtEdit.Text <> "" and row = frmEdit.pumEdit.ListIndex Then
 		        // Overwrite
-		        qName = qName + App.RemoveQuotes(names(0)) + ","
-		        qData = qData + "'" + txtEdit.Text + "'" + ","
+		        qId.Append(App.tblDataInd(row + 1))
+		        qData.Append(txtEdit.Text)
 		        
 		      ElseIf  frmEdit.lstEdit.Cell(row, 1) <> "" Then
 		        // Write
-		        qName = qName + App.RemoveQuotes(names(0)) + ","
-		        qData = qData + "'" + frmEdit.lstEdit.Cell(row, 1) + "'" + ","
+		        qId.Append(App.tblDataInd(row + 1))
+		        qData.Append(frmEdit.lstEdit.Cell(row, 1))
 		      End If
-		      
 		      
 		    Next
 		    
-		    If Len(qName) > 0 Then
-		      qName = Left(qName, Len(qName) -1)
-		      qData = Left(qData, Len(qData) -1)
-		      App.sqlDataInsert(App.tblData, qName, qData)
+		    If qId.Ubound <> -1 Then
+		      App.sqlDataInsert(App.tblData, qId, qData)
 		    End If
 		    
 		    Clear()
@@ -610,35 +600,37 @@ End
 		    
 		  ElseIf mode = 1 Then
 		    
-		    Dim index() As String
-		    index() = Split(Trim(App.tblDataInd), ",")
+		    MsgBox "not support"
 		    
-		    Dim qSet As String
-		    
-		    For row As Integer = 0 To frmEdit.lstEdit.ListCount - 1
-		      Dim names() As String
-		      names() =Split(Trim(index(row + 1)))
-		      
-		      If frmEdit.txtEdit.Text <> "" and row = frmEdit.pumEdit.ListIndex Then
-		        // Overwrite
-		        qSet = qSet + App.RemoveQuotes(names(0)) + "="
-		        qSet = qSet + "'" + txtEdit.Text + "'" + ","
-		        
-		      ElseIf  frmEdit.lstEdit.CellState(row, 2) = CheckBox.CheckedStates.Checked Then
-		        // Write
-		        qSet = qSet + App.RemoveQuotes(names(0)) + "="
-		        qSet = qSet + "'" + frmEdit.lstEdit.Cell(row, 1) + "'" + ","
-		      End If
-		      
-		    Next
-		    
-		    If Len(qSet) > 0 Then
-		      qSet = Left(qSet, Len(qSet) -1)
-		      App.sqlDataUpdate(App.tblData, qSet, "id=" + Str(id(0)))
-		    End If
-		    
-		    App.showDBMain
-		    frmEdit.Close
+		    'Dim index() As String
+		    'index() = Split(Trim(App.tblDataInd), ",")
+		    '
+		    'Dim qSet As String
+		    '
+		    'For row As Integer = 0 To frmEdit.lstEdit.ListCount - 1
+		    'Dim names() As String
+		    'names() =Split(Trim(index(row + 1)))
+		    '
+		    'If frmEdit.txtEdit.Text <> "" and row = frmEdit.pumEdit.ListIndex Then
+		    '// Overwrite
+		    'qSet = qSet + App.RemoveQuotes(names(0)) + "="
+		    'qSet = qSet + "'" + txtEdit.Text + "'" + ","
+		    '
+		    'ElseIf  frmEdit.lstEdit.CellState(row, 2) = CheckBox.CheckedStates.Checked Then
+		    '// Write
+		    'qSet = qSet + App.RemoveQuotes(names(0)) + "="
+		    'qSet = qSet + "'" + frmEdit.lstEdit.Cell(row, 1) + "'" + ","
+		    'End If
+		    '
+		    'Next
+		    '
+		    'If Len(qSet) > 0 Then
+		    'qSet = Left(qSet, Len(qSet) -1)
+		    'App.sqlDataUpdate(App.tblData, qSet, "id=" + Str(id(0)))
+		    'End If
+		    '
+		    'App.showDBMain
+		    'frmEdit.Close
 		    
 		    
 		  ElseIf mode = 2 Then

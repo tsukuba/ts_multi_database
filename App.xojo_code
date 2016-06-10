@@ -6,6 +6,13 @@ Inherits Application
 		  // App Setting
 		  App.AutoQuit = True
 		  
+		  // Array Init
+		  tblLogInd = Array("id", "level", "code", "time", "msg")
+		  tblLogType = Array("BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT", "TINYINT UNSIGNED NOT NULL", "SMALLINT UNSIGNED NOT NULL", "DATETIME NOT NULL", "TEXT UNICODE NOT NULL")
+		  
+		  tblDataInd = Array("id", "time", "d1", "d2", "d3", "d4", "d5")
+		  tblDataType = Array("BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT", "DATETIME NOT NULL, text TEXT UNICODE NOT NULL", "TEXT UNICODE", "TEXT UNICODE", "TEXT UNICODE", "TEXT UNICODE", "TEXT UNICODE")
+		  tblDataName = Array("ID", "Time", "ISBN", "データ1", "データ2", "データ3", "データ4", "データ5")
 		  
 		  // DB
 		  dbClose()
@@ -229,7 +236,7 @@ Inherits Application
 		  // DB Check
 		  
 		  If Not sqlIsTableExists(tblLog) Then
-		    sqlTableCreate(tblLog, tblLogInd)
+		    sqlTableCreate(tblLog, tblLogInd, tblLogType)
 		  End If
 		  
 		  'If Not sqlIsTableExists(tblCategory) Then
@@ -238,10 +245,11 @@ Inherits Application
 		  
 		  If Not sqlIsTableExists(tblData) Then
 		    frmDBIndex.ShowModal
-		    sqlTableCreate(tblData, tblDataInd)
+		    //sqlTableCreate(tblData, tblDataInd)
 		  Else
 		    // Set Index From DB
-		    tblDataInd = sqlShowCreateTable(tblData)
+		    msgbox sqlShowCreateTable(tblData)
+		    //tblDataInd = sqlShowCreateTable(tblData)
 		    
 		    // Set Index Name From DB
 		    //MsgBox tblDataInd
@@ -373,27 +381,11 @@ Inherits Application
 		  
 		  // Set List InitialValue
 		  If frmMain.lstMain.InitialValue = "" Then
-		    Dim index As String
-		    If tblDataName <> "" Then
+		    If tblDataName.Ubound <> -1 Then
 		      frmLog.addLog(4,40401,New Date,"Set SQL Index")
-		      index = ReplaceAll(tblDataName, ",", Chr(9))
-		    Else
-		      frmLog.addLog(3,40301,New Date,"Set SQL Index Using Create Table")
-		      For Each s As String In Split(Trim(tblDataInd), ",")
-		        Dim w() As String
-		        w = Split(Trim(s), " ")
-		        If Lowercase(Trim(w(0))) <> "primary" And Lowercase(Trim(w(1))) <> "key" Then
-		          If index <> "" Then
-		            index = index + ","
-		          End If
-		          index = index + RemoveQuotes(w(0))
-		        End If
-		      Next
-		      index = ReplaceAll(index, ",", Chr(9))
+		      frmMain.lstMain.InitialValue =Join(tblDataName, Chr(9))
 		    End If
-		    frmMain.lstMain.InitialValue =index
 		  End If
-		  
 		  
 		  If stp < 1 Then
 		    stp = 100
@@ -497,20 +489,20 @@ Inherits Application
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub sqlDataInsert(table As String, name As String, value As String)
+		Sub sqlDataInsert(table As String, name() As String, value() As String)
 		  //
 		  // ERROR_CODE 62XXX
 		  
-		  frmLog.addLog(3,62301,New Date,"SQL Data Insert: " + table + " " + name + " " + value)
+		  frmLog.addLog(3,62301,New Date,"SQL Data Insert: " + table + " " + Join(name, ",") + " " + Join(value, ","))
 		  
 		  If dbIsConnected Then
-		    db.SQLExecute("INSERT INTO " + table + "(" + name + ") VALUES (" + value + ")")
+		    db.SQLExecute("INSERT INTO " + table + "(" + Join(name, ",") + ") VALUES (" + Join(value, ",") + ")")
 		  End If
 		  
 		  If db.Error Then
 		    frmLog.addLog(1,62101,New Date,"SQL Error: " + db.ErrorMessage)
 		  Else
-		    frmLog.addLog(3,62302,New Date,"SQL Data Inserted: " + table + " " + name + " " + value)
+		    frmLog.addLog(3,62302,New Date,"SQL Data Inserted: " + table + " " + Join(name, ",") + " " + Join(value, ","))
 		  End If
 		  
 		End Sub
@@ -587,6 +579,23 @@ Inherits Application
 		  
 		  
 		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function sqlEscape(query As String) As String
+		  
+		  // Escape + * / - . ' :
+		  
+		  query = ReplaceAll(query, Chr(39), Chr(39) +  Chr(39)) // ' -> ''
+		  query = ReplaceAll(query, Chr(92), Chr(92) +  Chr(92)) // \ -> \\
+		  query = ReplaceAll(query, Chr(42), "") // * ->
+		  query = ReplaceAll(query, Chr(43), "") // + ->
+		  query = ReplaceAll(query, Chr(45), "") // - ->
+		  query = ReplaceAll(query, Chr(47), "") // / ->
+		  
+		  Return query
+		  
+		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
@@ -683,22 +692,33 @@ Inherits Application
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Sub sqlTableCreate(table As String, Query As String)
+		Private Sub sqlTableCreate(table As String, id() As String, type() As String)
 		  //
 		  // ERROR_CODE 52XXX
 		  
-		  frmLog.addLog(3,52301,New Date,"SQL Table Create: " + table + " (" + query + ")")
-		  
-		  If dbIsConnected Then
-		    db.SQLExecute("CREATE TABLE " + table + " (" + query + ")")
-		  End If
-		  
-		  If db.Error Then
-		    frmLog.addLog(1,52102,New Date,"SQL Error: " + db.ErrorMessage)
+		  If id.Ubound <> type.Ubound Then
+		    frmLog.addLog(1,52101,New Date,"SQL Table Create Parameter Error")
+		    
 		  Else
-		    frmLog.addLog(4,52401,New Date,"SQL Table Created: " + table + " (" + query + ")")
+		    
+		    Dim query() As String
+		    For i As Integer = 0 To id.Ubound
+		      query.Append(sqlEscape(id(i)) + " " + sqlEscape(type(i)))
+		    Next
+		    
+		    frmLog.addLog(3,52301,New Date,"SQL Table Create: " + table + " (" + Join(query, ",") + ")")
+		    
+		    If dbIsConnected Then
+		      db.SQLExecute("CREATE TABLE " + table + " (" + Join(query, ",") + ")")
+		    End If
+		    
+		    If db.Error Then
+		      frmLog.addLog(1,52102,New Date,"SQL Error: " + db.ErrorMessage)
+		    Else
+		      frmLog.addLog(4,52401,New Date,"SQL Table Created: " + table + " (" + Join(query, ",") + ")")
+		    End If
+		    
 		  End If
-		  
 		  
 		End Sub
 	#tag EndMethod
@@ -828,11 +848,15 @@ Inherits Application
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		tblDataInd As String = "id BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT, time DATETIME NOT NULL, text TEXT UNICODE NOT NULL, d1 TEXT UNICODE, d2 TEXT UNICODE, d3 TEXT UNICODE, d4 TEXT UNICODE, d5 TEXT UNICODE"
+		tblDataInd() As String
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		tblDataName As String = "ID,Time,ISBN,データ1,データ2,データ3,データ4,データ5"
+		tblDataName() As String
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		tblDataType() As String
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
@@ -840,7 +864,11 @@ Inherits Application
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
-		Private tblLogInd As String = "id BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT, level TINYINT UNSIGNED NOT NULL, code SMALLINT UNSIGNED NOT NULL, time DATETIME NOT NULL, msg TEXT UNICODE NOT NULL"
+		Private tblLogInd() As String
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private tblLogType() As String
 	#tag EndProperty
 
 
