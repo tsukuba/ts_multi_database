@@ -8,6 +8,7 @@ BuildSteps=Build Automation;Build Automation.xojo_code;&h53987FFF;&h0;false
 Window=frmLog;frmLog.xojo_window;&h2BD1C7FF;&h0;false
 MenuBar=mnuLog;mnuLog.xojo_menu;&h28E1BFFF;&h0;false
 Window=frmEdit;frmEdit.xojo_window;&h5FE35FFF;&h0;false
+Window=frmHiddenConf;frmHiddenConf.xojo_window;&h12A567FF;&h0;false
 Window=frmDBConf;frmDBConf.xojo_window;&h67FFEFFF;&h0;false
 Window=frmDBDefault;frmDBDefault.xojo_window;&h133E87FF;&h0;false
 Window=frmDBEditConf;frmDBEditConf.xojo_window;&h75425FFF;&h0;false

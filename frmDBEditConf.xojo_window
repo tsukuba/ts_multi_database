@@ -73,6 +73,7 @@ Begin Window frmDBEditConf
       UseFocusRing    =   True
       Visible         =   True
       Width           =   259
+      _ScrollOffset   =   0
       _ScrollWidth    =   -1
    End
    Begin PushButton btnNew
@@ -228,6 +229,8 @@ End
 		  App.dbConfCloseMode = False
 		  frmDBConf.ShowModalWithin frmDBEditConf
 		  
+		  ShowList()
+		  
 		  
 		End Sub
 	#tag EndMethod
@@ -292,7 +295,7 @@ End
 	#tag Event
 		Sub Action()
 		  
-		  If lstConnect.ListCount >= 1 Then
+		  If lstConnect.ListCount > 1 Then
 		    Dim file as FolderItem
 		    file = App.fileConnectFolder.Child(lstConnect.Text + ".xml")
 		    file.Delete
